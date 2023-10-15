@@ -11,3 +11,55 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+p {
+  color: aliceblue;
+}
+
+.rootStyle {
+  height: 100vh;
+  min-height: 100vh;
+  background-color: #494949;
+}
+
+.container {
+  color: aliceblue;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 1fr 80% 1fr;
+  grid-template-rows: auto 1fr 1fr 1fr 1fr;
+  gap: 10px 10px;
+  grid-template-areas:
+    "Header Header Header"
+    ". Playing ."
+    ". Wanted ."
+    ". Finished ."
+    ". Add-button .";
+}
+
+.Header {
+  padding-top: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-area: Header;
+}
+
+.Playing {
+  grid-area: Playing;
+}
+
+.Wanted {
+  grid-area: Wanted;
+}
+
+.Finished {
+  grid-area: Finished;
+}
+
+.Add-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-area: Add-button;
+}

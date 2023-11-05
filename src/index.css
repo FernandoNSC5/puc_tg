@@ -7,59 +7,39 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+h2 {
+  color: #7e40f6;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-p {
-  color: aliceblue;
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #7e40f6;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to right,
+    #595cff,
+    #c6f8ff
+  );
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(
+    to right,
+    #595cff,
+    #c6f8ff
+  );
 }
 
-.rootStyle {
-  height: 100vh;
-  min-height: 100vh;
-  background-color: #494949;
-}
-
-.container {
-  color: aliceblue;
-  display: grid;
-  grid-auto-columns: 1fr;
-  grid-template-columns: 1fr 80% 1fr;
-  grid-template-rows: auto 1fr 1fr 1fr 1fr;
-  gap: 10px 10px;
-  grid-template-areas:
-    "Header Header Header"
-    ". Playing ."
-    ". Wanted ."
-    ". Finished ."
-    ". Add-button .";
-}
-
-.Header {
-  padding-top: 30vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  grid-area: Header;
-}
-
-.Playing {
-  grid-area: Playing;
-}
-
-.Wanted {
-  grid-area: Wanted;
-}
-
-.Finished {
-  grid-area: Finished;
-}
-
-.Add-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  grid-area: Add-button;
+.mask-custom {
+  background: rgba(24, 24, 16, 0.2);
+  border-radius: 2em;
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  background-clip: padding-box;
+  box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
 }

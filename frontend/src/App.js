@@ -6,12 +6,24 @@ import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Card, CardBody, Table } from 'react-bootstrap';
 import Item from './components/item';
+import axios from 'axios';
 
 function App() {
+  axios.defaults.baseURL = 'http://localhost:8081';
   const [show, setShow] = useState(false);
+  const [gamesData, setGamesData] = useState([]);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    axios.get('/api')
+    .then(response => {
+      setGamesData(response.data);
+      setShow(true);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  };
 
   return (
     <>
@@ -62,7 +74,7 @@ function App() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add game</Modal.Title>
+          <Modal.Title>{gamesData.at(0)?.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           Woohoo, you are reading this text in a modal!

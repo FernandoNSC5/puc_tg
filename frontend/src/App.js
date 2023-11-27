@@ -2,14 +2,14 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Card, CardBody, Table } from 'react-bootstrap';
 import Item from './components/item';
 import axios from 'axios';
 
+
 function App() {
-  axios.defaults.baseURL = 'http://localhost:8081';
   const [show, setShow] = useState(false);
   const [gamesData, setGamesData] = useState([]);
 
@@ -18,12 +18,26 @@ function App() {
     axios.get('/api')
     .then(response => {
       setGamesData(response.data);
+      console.log('Other way: ', response.data);
       setShow(true);
     })
     .catch(error => {
       console.log(error);
     });
   };
+
+  useEffect(() => {
+    axios.get('/api')
+    .then(response => {
+      setGamesData(response.data);
+      console.log(response.data);
+      setShow(true);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }, []);
+  console.log(gamesData);
 
   return (
     <>
@@ -51,12 +65,10 @@ function App() {
                       </tr>
                     </thead>
                     <tbody>
-                      <Item imagePath="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                        altText="avatar 1" gameName="The Legend of Zelda" description="Link's Awakening" gameStatus="playing"/>
-                      <Item imagePath="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                        altText="avatar 2" gameName="The Legend of Zelda" description="Breath of the Wild" gameStatus="playing"/>
-                      <Item imagePath="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                        altText="avatar 2" gameName="Super Mario Bros." description="In Wonderland!" gameStatus="playing"/>
+                      {gamesData?.map(gameData => {
+                        return <Item imagePath="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                        altText="avatar 1" gameName={gameData.name} description={gameData?.complement} gameStatus={gameData?.status}/>
+                      })}
                     </tbody>
                   </Table>
                   <hr/>
@@ -74,7 +86,7 @@ function App() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{gamesData.at(0)?.name}</Modal.Title>
+          {/* <Modal.Title>{gamesData.at(0)?.name}</Modal.Title> */}
         </Modal.Header>
         <Modal.Body>
           Woohoo, you are reading this text in a modal!

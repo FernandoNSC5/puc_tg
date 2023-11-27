@@ -1,5 +1,6 @@
 package com.tiannamen.puctg.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.tiannamen.puctg.model.dto.GameDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,7 @@ public class MainController {
         List<GameDTO> gameList = new ArrayList<>();
         gameList.add(gameDTO);
         gameList.add(gameDTO2);
+        System.out.println("Responding " + gameList.toString());
         return ResponseEntity.ok(gameList);
     }
 }

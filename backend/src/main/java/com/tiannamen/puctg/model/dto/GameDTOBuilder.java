@@ -18,7 +18,7 @@ public class GameDTOBuilder {
         return this;
     }
 
-    public GameDTOBuilder complement(String name) {
+    public GameDTOBuilder complement(String complement) {
         this.complement = complement;
         return this;
     }

@@ -1,5 +1,11 @@
 package com.tiannamen.puctg.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.core.io.ByteArrayResource;
+
+@Setter
+@Getter
 public class GameDTO {
 
     private String id;
@@ -10,46 +16,19 @@ public class GameDTO {
 
     private String status;
 
+    private ByteArrayResource byteArrayResource;
+
+    private byte[] byteArray;
+
     public static GameDTOBuilder builder() {
         return new GameDTOBuilder();
     }
 
-    public GameDTO(String id, String name, String complement, String status) {
+    public GameDTO(String id, String name, String complement, String status, byte[] byteArray) {
         this.id = id;
         this.name = name;
         this.complement = complement;
         this.status = status;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getComplement() {
-        return complement;
-    }
-
-    public void setComplement(String complement) {
-        this.complement = complement;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+        this.byteArray = byteArray;
     }
 }

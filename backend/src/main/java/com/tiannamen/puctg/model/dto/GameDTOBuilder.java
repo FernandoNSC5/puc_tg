@@ -1,10 +1,13 @@
 package com.tiannamen.puctg.model.dto;
 
+import org.springframework.core.io.ByteArrayResource;
+
 public class GameDTOBuilder {
     private String id;
     private String name;
     private String complement;
     private String status;
+    private byte[] byteArray;
 
     public GameDTOBuilder() {}
 
@@ -27,9 +30,13 @@ public class GameDTOBuilder {
         this.status = status;
         return this;
     }
+    public GameDTOBuilder byteArray(byte[] byteArray) {
+        this.byteArray = byteArray;
+        return this;
+    }
 
     public GameDTO build() {
-        return new GameDTO(id, name, complement, status);
+        return new GameDTO(id, name, complement, status, byteArray);
     }
 
     @Override

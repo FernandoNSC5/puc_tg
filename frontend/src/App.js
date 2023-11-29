@@ -66,7 +66,7 @@ function App() {
                     </thead>
                     <tbody>
                       {gamesData?.map(gameData => {
-                        return <Item imagePath="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                        return <Item imagePath={'data:image/jpeg;base64,' + gameData.byteArray}
                         altText="avatar 1" gameName={gameData.name} description={gameData?.complement} gameStatus={gameData?.status}/>
                       })}
                     </tbody>

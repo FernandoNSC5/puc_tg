@@ -23,6 +23,28 @@ function App() {
     handleShowModal('addGame');
   }
 
+  const handleSave = () => {
+    axios.post('/api', {
+      freeGameId: selectedGame.id,
+      title: selectedGame.title,
+      thumbnail: selectedGame.thumbnail,
+      shortDescription: selectedGame.short_description,
+      genre: selectedGame.genre,
+      platform: selectedGame.platform,
+      developer: selectedGame.developer,
+      publisher: selectedGame.publisher,
+      releaseDate: selectedGame.release_date,
+      isCompleted: false
+    }, {
+      hearders: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    setSelectedGame(null);
+    handleCloseModal();
+  }
+
   /**************************************************
    *   Modals logic
    *************************************************/
@@ -45,6 +67,7 @@ function App() {
   /**************************************************
    *   Loads list of registeded games
    *************************************************/
+  // calls freegames.com api
   useEffect(() => {
     axios.get('/api/freeGames')
     .then(response => {
@@ -55,6 +78,7 @@ function App() {
       console.log(error);
     });
 
+    // returns all saved games
     axios.get('/api')
     .then(response => {
       setLoadedGames(response.data);
@@ -95,8 +119,8 @@ function App() {
                     </thead>
                     <tbody>
                       {loadedGames?.map(gameData => {
-                        return <Item imagePath={'data:image/jpeg;base64,' + gameData.byteArray}
-                        altText="avatar 1" gameId={gameData.id} gameName={gameData.name} description={gameData?.complement} gameStatus={gameData?.status} showModal={handleShowModal}/>
+                        return <Item key={gameData.freeGameId} imagePath={gameData.thumbnail}
+                        gameId={gameData.freeGameId} gameName={gameData.title} description={gameData?.shortDescription} gameStatus={gameData?.isCompleted} showModal={handleShowModal}/>
                       })}
                     </tbody>
                   </Table>
@@ -134,6 +158,12 @@ function App() {
               <Col xs lg="7">
                 <p>{selectedGame?.short_description}</p>
                 <p><strong>{selectedGame?.developer}</strong> - {selectedGame?.release_date}</p>
+                <Form>
+                  <Form.Check
+                    type='switch'
+                    id='completed-switch'
+                    label="Game Completed" />
+                </Form>
               </Col>
             </Row>
           </Container>
@@ -142,7 +172,7 @@ function App() {
           <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleCloseModal}>
+          <Button variant="primary" onClick={handleSave}>
             Save Changes
           </Button>
         </Modal.Footer>

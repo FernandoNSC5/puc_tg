@@ -10,34 +10,44 @@ import axios from 'axios';
 
 
 function App() {
-  const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState({shouldShow: false, type: 'addGame'});
   const [gamesData, setGamesData] = useState([]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => {
-    axios.get('/api')
-    .then(response => {
-      setGamesData(response.data);
-      console.log('Other way: ', response.data);
-      setShow(true);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  const handleCloseModal = () => setShowModal({shouldShow: false, type: 'all'});
+  const handleShowModal = (action, gameId) => {
+    // Hanldes 'add game' modal
+    if (action === 'addGame') {
+      axios.get('/api')
+      .then(response => {
+        setGamesData(response.data);
+        setShowModal({shouldShow: true, type: action});
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    }
+
+    if (action === 'completeGame') {
+      setShowModal({shouldShow: true, type: action});
+      console.log(gameId);
+    }
+
+    if (action === 'editGame') {
+      setShowModal({shouldShow: true, type: action});
+      console.log(gameId);
+    }
   };
 
+  // Loads list registeded games
   useEffect(() => {
     axios.get('/api')
     .then(response => {
       setGamesData(response.data);
-      console.log(response.data);
-      setShow(true);
     })
     .catch(error => {
       console.log(error);
     });
   }, []);
-  console.log(gamesData);
 
   return (
     <>
@@ -67,13 +77,13 @@ function App() {
                     <tbody>
                       {gamesData?.map(gameData => {
                         return <Item imagePath={'data:image/jpeg;base64,' + gameData.byteArray}
-                        altText="avatar 1" gameName={gameData.name} description={gameData?.complement} gameStatus={gameData?.status}/>
+                        altText="avatar 1" gameId={gameData.id} gameName={gameData.name} description={gameData?.complement} gameStatus={gameData?.status} showModal={handleShowModal}/>
                       })}
                     </tbody>
                   </Table>
                   <hr/>
                   <div className="d-grid gap-2">
-                    <Button variant="primary" size="lg" onClick={handleShow}>
+                    <Button variant="primary" size="lg" onClick={e => handleShowModal('addGame')}>
                       Add game
                     </Button>
                   </div>
@@ -84,18 +94,59 @@ function App() {
         </Container>
       </section>
 
-      <Modal show={show} onHide={handleClose}>
+      {/*****************
+      **  ALL PAGE MODALS 
+      *******************/}
+
+      {/* ADD GAME MODAL */}
+      <Modal show={showModal.shouldShow && showModal.type === 'addGame'} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          {/* <Modal.Title>{gamesData.at(0)?.name}</Modal.Title> */}
+          Add Games
         </Modal.Header>
         <Modal.Body>
           Woohoo, you are reading this text in a modal!
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* EDIT GAME MODAL */}
+      <Modal show={showModal.shouldShow && showModal.type === 'editGame'} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          Edit Game
+        </Modal.Header>
+        <Modal.Body>
+          Woohoo, you are reading this text in a modal!
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/** CONFIRM COMPLETION MODAL */}
+      <Modal show={showModal.shouldShow && showModal.type === 'completeGame'} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          Complete Game
+        </Modal.Header>
+        <Modal.Body>
+          Woohoo, you are reading this text in a modal!
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleCloseModal}>
             Save Changes
           </Button>
         </Modal.Footer>

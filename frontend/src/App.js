@@ -24,23 +24,28 @@ function App() {
   }
 
   const handleSave = () => {
-    axios.post('/api', {
-      freeGameId: selectedGame.id,
-      title: selectedGame.title,
-      thumbnail: selectedGame.thumbnail,
-      shortDescription: selectedGame.short_description,
-      genre: selectedGame.genre,
-      platform: selectedGame.platform,
-      developer: selectedGame.developer,
-      publisher: selectedGame.publisher,
-      releaseDate: selectedGame.release_date,
-      isCompleted: false
-    }, {
+    let data = {};
+    data.freeGameId = selectedGame.id;
+    data.title = selectedGame.title;
+    data.thumbnail = selectedGame.thumbnail;
+    data.shortDescription = selectedGame.short_description;
+    data.genre = selectedGame.genre;
+    data.platform = selectedGame.platform;
+    data.developer = selectedGame.developer;
+    data.publisher = selectedGame.publisher;
+    data.releaseDate = selectedGame.release_date;
+    data.isCompleted = false;
+
+    axios.post('/api', data, {
       hearders: {
         'Content-Type': 'application/json'
       }
     })
 
+    let parsedLoadedGames = JSON.parse(JSON.stringify(loadedGames));
+    data.key = selectedGame.freeGameId;
+    parsedLoadedGames.push(data);
+    setLoadedGames(parsedLoadedGames);
     setSelectedGame(null);
     handleCloseModal();
   }

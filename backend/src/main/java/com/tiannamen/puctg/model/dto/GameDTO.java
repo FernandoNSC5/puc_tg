@@ -1,34 +1,33 @@
 package com.tiannamen.puctg.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.core.io.ByteArrayResource;
 
 @Setter
 @Getter
+@AllArgsConstructor
 public class GameDTO {
 
-    private String id;
+    private Long freeGameId;
 
-    private String name;
+    private String title;
 
-    private String complement;
+    private String thumbnail;
 
-    private String status;
+    private String shortDescription;
 
-    private ByteArrayResource byteArrayResource;
+    private String genre;
 
-    private byte[] byteArray;
+    private String platform;
 
-    public static GameDTOBuilder builder() {
-        return new GameDTOBuilder();
-    }
+    private String developer;
 
-    public GameDTO(String id, String name, String complement, String status, byte[] byteArray) {
-        this.id = id;
-        this.name = name;
-        this.complement = complement;
-        this.status = status;
-        this.byteArray = byteArray;
-    }
+    private String publisher;
+
+    private String releaseDate;
+
+    private boolean isCompleted;
+
+    public static GameDTOBuilder builder() {return new GameDTOBuilder();}
 }

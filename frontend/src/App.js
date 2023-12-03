@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { Card, CardBody, Table } from 'react-bootstrap';
+import { Card, CardBody, Image, Table } from 'react-bootstrap';
 import Item from './components/item';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
@@ -13,36 +13,43 @@ import Form from 'react-bootstrap/Form';
 function App() {
   const [showModal, setShowModal] = useState({shouldShow: false, type: 'addGame'});
   const [freeGames, setFreeGames] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
   const [loadedGames, setLoadedGames] = useState([]);
 
   var gameOptions = [{}];
 
+  const handleSelectedGame = (event) => {
+    setSelectedGame(JSON.parse(event.target.value));
+    handleShowModal('addGame');
+  }
+
+  /**************************************************
+   *   Modals logic
+   *************************************************/
   const handleCloseModal = () => setShowModal({shouldShow: false, type: 'all'});
   const handleShowModal = (action, gameId) => {
     // Hanldes 'add game' modal
     if (action === 'addGame') {
-      console.log('On add game: ', freeGames);
       setShowModal({shouldShow: true, type: action});
     }
 
     if (action === 'completeGame') {
       setShowModal({shouldShow: true, type: action});
-      console.log(gameId);
     }
 
     if (action === 'editGame') {
       setShowModal({shouldShow: true, type: action});
-      console.log(gameId);
     }
   };
 
-  // Loads list registeded games
+  /**************************************************
+   *   Loads list of registeded games
+   *************************************************/
   useEffect(() => {
     axios.get('/api/freeGames')
     .then(response => {
       gameOptions = response.data;
       setFreeGames(gameOptions);
-      console.log('FreeGames:',freeGames);
     })
     .catch(error => {
       console.log(error);
@@ -57,6 +64,10 @@ function App() {
     });
   }, []);
 
+
+  /**************************************************
+   *   Page data
+   *************************************************/
   return (
     <>
       <section className="gradient-custom-2 vh-100">
@@ -91,9 +102,12 @@ function App() {
                   </Table>
                   <hr/>
                   <div className="d-grid gap-2">
-                    <Button variant="primary" size="lg" onClick={e => handleShowModal('addGame')}>
-                      Add game
-                    </Button>
+                    <Form.Select onChange={handleSelectedGame} aria-label="Select a game">
+                      <option>Add a game</option>
+                      {freeGames?.map(gameData => {
+                        return <option key={gameData.id} value={JSON.stringify(gameData)}>{gameData.title}</option> 
+                      })}
+                    </Form.Select>
                   </div>
                 </CardBody>
               </Card>
@@ -107,18 +121,22 @@ function App() {
       *******************/}
 
       {/* ADD GAME MODAL */}
-      <Modal show={showModal.shouldShow && showModal.type === 'addGame'} onHide={handleCloseModal}>
+      <Modal show={showModal.shouldShow && showModal.type === 'addGame'} onHide={handleCloseModal} size="lg">
         <Modal.Header closeButton>
-          Add Game
+          <h3>{selectedGame?.title}</h3>
         </Modal.Header>
         <Modal.Body>
-          <Form.Select aria-label="Default select example">
-            {console.log('Game options: ', freeGames)}
-            <option>Select a game</option>
-            {freeGames?.map(gameData => {
-              return <option key={gameData.id} value={{id: gameData.id, name: gameData.title, complement: gameData.short_description, imgUrl: gameData.game_url}}>{gameData.title}</option> 
-            })}
-          </Form.Select>
+          <Container>
+            <Row>
+              <Col md="auto">
+                <Image src={selectedGame?.thumbnail} style={{ width: "15em", height: "auto" }} rounded/>
+              </Col>
+              <Col xs lg="7">
+                <p>{selectedGame?.short_description}</p>
+                <p><strong>{selectedGame?.developer}</strong> - {selectedGame?.release_date}</p>
+              </Col>
+            </Row>
+          </Container>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>

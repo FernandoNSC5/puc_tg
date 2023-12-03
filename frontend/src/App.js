@@ -7,24 +7,22 @@ import Modal from 'react-bootstrap/Modal';
 import { Card, CardBody, Table } from 'react-bootstrap';
 import Item from './components/item';
 import axios from 'axios';
+import Form from 'react-bootstrap/Form';
 
 
 function App() {
   const [showModal, setShowModal] = useState({shouldShow: false, type: 'addGame'});
-  const [gamesData, setGamesData] = useState([]);
+  const [freeGames, setFreeGames] = useState([]);
+  const [loadedGames, setLoadedGames] = useState([]);
+
+  var gameOptions = [{}];
 
   const handleCloseModal = () => setShowModal({shouldShow: false, type: 'all'});
   const handleShowModal = (action, gameId) => {
     // Hanldes 'add game' modal
     if (action === 'addGame') {
-      axios.get('/api')
-      .then(response => {
-        setGamesData(response.data);
-        setShowModal({shouldShow: true, type: action});
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      console.log('On add game: ', freeGames);
+      setShowModal({shouldShow: true, type: action});
     }
 
     if (action === 'completeGame') {
@@ -40,9 +38,19 @@ function App() {
 
   // Loads list registeded games
   useEffect(() => {
+    axios.get('/api/freeGames')
+    .then(response => {
+      gameOptions = response.data;
+      setFreeGames(gameOptions);
+      console.log('FreeGames:',freeGames);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
     axios.get('/api')
     .then(response => {
-      setGamesData(response.data);
+      setLoadedGames(response.data);
     })
     .catch(error => {
       console.log(error);
@@ -75,7 +83,7 @@ function App() {
                       </tr>
                     </thead>
                     <tbody>
-                      {gamesData?.map(gameData => {
+                      {loadedGames?.map(gameData => {
                         return <Item imagePath={'data:image/jpeg;base64,' + gameData.byteArray}
                         altText="avatar 1" gameId={gameData.id} gameName={gameData.name} description={gameData?.complement} gameStatus={gameData?.status} showModal={handleShowModal}/>
                       })}
@@ -101,10 +109,16 @@ function App() {
       {/* ADD GAME MODAL */}
       <Modal show={showModal.shouldShow && showModal.type === 'addGame'} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          Add Games
+          Add Game
         </Modal.Header>
         <Modal.Body>
-          Woohoo, you are reading this text in a modal!
+          <Form.Select aria-label="Default select example">
+            {console.log('Game options: ', freeGames)}
+            <option>Select a game</option>
+            {freeGames?.map(gameData => {
+              return <option key={gameData.id} value={{id: gameData.id, name: gameData.title, complement: gameData.short_description, imgUrl: gameData.game_url}}>{gameData.title}</option> 
+            })}
+          </Form.Select>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>

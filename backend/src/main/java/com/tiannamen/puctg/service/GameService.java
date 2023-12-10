@@ -22,6 +22,19 @@ public class GameService {
         return gameDTO;
     }
 
+    public void deleteGame(GameDTO gameDTO) {
+        gameRepository.delete(GameMapper.toGame(gameDTO));
+    }
+
+    public GameDTO patchGame(GameDTO gameDTO) {
+        Game game = gameRepository.getReferenceById(gameDTO.getFreeGameId());
+        game.setCompleted(gameDTO.isCompleted());
+        gameRepository.save(game);
+        return gameDTO;
+    }
+
+
+
     public GameDTO findById(Long id) {
         Optional<Game> game = gameRepository.findById(id);
         if (game.isPresent()) {

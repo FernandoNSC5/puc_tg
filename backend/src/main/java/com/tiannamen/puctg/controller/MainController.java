@@ -1,8 +1,10 @@
 package com.tiannamen.puctg.controller;
 
 import com.tiannamen.puctg.model.dto.GameDTO;
+import com.tiannamen.puctg.service.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +14,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,7 +21,9 @@ import java.util.List;
 @RequestMapping("/api")
 public class MainController {
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
-    private List<GameDTO> pseudoDatabase = new ArrayList<>();
+
+    @Autowired
+    private GameService gameService;
 
     public MainController() {
     }
@@ -28,26 +31,40 @@ public class MainController {
     @PostMapping
     @CrossOrigin
     public ResponseEntity<GameDTO> save(@RequestBody GameDTO gameDTO) {
-        pseudoDatabase.add(gameDTO);
-        return ResponseEntity.created((URI) null).body(gameDTO);
+        try {
+            gameService.saveGame(gameDTO);
+            return ResponseEntity.created((URI) null).body(gameDTO);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
     }
 
     @GetMapping
     @CrossOrigin
     public ResponseEntity<List<GameDTO>> getSavedGames() {
-        return ResponseEntity.ok(pseudoDatabase);
+        return ResponseEntity.ok(gameService.findAllRegisteredGames());
     }
 
     @DeleteMapping
     @CrossOrigin
     public ResponseEntity<GameDTO> deleteGame(@RequestBody GameDTO gameDTO) {
-        return ResponseEntity.ok(null);
+        try {
+            gameService.deleteGame(gameDTO);
+            return ResponseEntity.ok(null);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
     }
 
     @PatchMapping
     @CrossOrigin
     public ResponseEntity<GameDTO> updateGame(@RequestBody GameDTO gameDTO) {
-        return ResponseEntity.ok(null);
+        try {
+            gameService.patchGame(gameDTO);
+            return ResponseEntity.ok(null);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
     }
 
     @GetMapping("/freeGames")

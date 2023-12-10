@@ -38,6 +38,18 @@ public class MainController {
         return ResponseEntity.ok(pseudoDatabase);
     }
 
+    @DeleteMapping
+    @CrossOrigin
+    public ResponseEntity<GameDTO> deleteGame(@RequestBody GameDTO gameDTO) {
+        return ResponseEntity.ok(null);
+    }
+
+    @PatchMapping
+    @CrossOrigin
+    public ResponseEntity<GameDTO> updateGame(@RequestBody GameDTO gameDTO) {
+        return ResponseEntity.ok(null);
+    }
+
     @GetMapping("/freeGames")
     @CrossOrigin
     public ResponseEntity<String> getAllFreeGames() throws IOException {

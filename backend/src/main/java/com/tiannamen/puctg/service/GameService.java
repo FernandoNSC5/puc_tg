@@ -2,6 +2,7 @@ package com.tiannamen.puctg.service;
 
 import com.tiannamen.puctg.mapper.GameMapper;
 import com.tiannamen.puctg.model.dto.GameDTO;
+import com.tiannamen.puctg.model.dto.GameSimplifiedDTO;
 import com.tiannamen.puctg.model.entity.Game;
 import com.tiannamen.puctg.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,8 @@ public class GameService {
         return gameDTO;
     }
 
-    public void deleteGame(GameDTO gameDTO) {
+    public void deleteGame(GameSimplifiedDTO simplifiedDTO) {
+        GameDTO gameDTO = findById(simplifiedDTO.getFreeGameId());
         gameRepository.delete(GameMapper.toGame(gameDTO));
     }
 

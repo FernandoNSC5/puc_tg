@@ -1,6 +1,7 @@
 package com.tiannamen.puctg.controller;
 
 import com.tiannamen.puctg.model.dto.GameDTO;
+import com.tiannamen.puctg.model.dto.GameSimplifiedDTO;
 import com.tiannamen.puctg.service.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ public class MainController {
     @CrossOrigin
     public ResponseEntity<GameDTO> save(@RequestBody GameDTO gameDTO) {
         try {
+            logger.info("Saving game {}", gameDTO.getTitle());
             gameService.saveGame(gameDTO);
             return ResponseEntity.created((URI) null).body(gameDTO);
         } catch (Exception e) {
@@ -42,14 +44,16 @@ public class MainController {
     @GetMapping
     @CrossOrigin
     public ResponseEntity<List<GameDTO>> getSavedGames() {
+        logger.info("Retrieving all games from database");
         return ResponseEntity.ok(gameService.findAllRegisteredGames());
     }
 
     @DeleteMapping
     @CrossOrigin
-    public ResponseEntity<GameDTO> deleteGame(@RequestBody GameDTO gameDTO) {
+    public ResponseEntity<GameDTO> deleteGame(@RequestBody GameSimplifiedDTO simplifiedDTO) {
         try {
-            gameService.deleteGame(gameDTO);
+            logger.info("Deleting game id {}", simplifiedDTO.getFreeGameId());
+            gameService.deleteGame(simplifiedDTO);
             return ResponseEntity.ok(null);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(null);
@@ -60,6 +64,7 @@ public class MainController {
     @CrossOrigin
     public ResponseEntity<GameDTO> updateGame(@RequestBody GameDTO gameDTO) {
         try {
+            logger.info("Updating game {}", gameDTO.getTitle());
             gameService.patchGame(gameDTO);
             return ResponseEntity.ok(null);
         } catch (Exception e) {
@@ -70,11 +75,13 @@ public class MainController {
     @GetMapping("/freeGames")
     @CrossOrigin
     public ResponseEntity<String> getAllFreeGames() throws IOException {
+        logger.info("Requesting from freegame...");
         URL url = new URL("https://www.freetogame.com/api/games ");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         int status = con.getResponseCode();
         if (status == 200) {
+            logger.info("Freegame ok");
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));
             String inputLine;
@@ -87,6 +94,7 @@ public class MainController {
             return ResponseEntity.ok(content.toString());
         }
 
+        logger.info("Something went wrong processing Freegame data");
         return ResponseEntity.internalServerError().body("Failed to connect to freetogame.com");
     }
 }

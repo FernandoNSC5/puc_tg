@@ -23,6 +23,28 @@ function App() {
     handleShowModal('addGame');
   }
 
+  const handleDelete = (gameId) => {
+    console.log('Deleting ', gameId);
+    let data = {};
+    data.freeGameId = gameId;
+
+    axios.delete('/api', {
+      hearders: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    }).then(response => {
+      axios.get('/api')
+      .then(response => {
+        setLoadedGames(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    })
+
+  }
+
   const handleSave = () => {
     let data = {};
     data.freeGameId = selectedGame.id;
@@ -125,7 +147,7 @@ function App() {
                     <tbody>
                       {loadedGames?.map(gameData => {
                         return <Item key={gameData.freeGameId} imagePath={gameData.thumbnail}
-                        gameId={gameData.freeGameId} gameName={gameData.title} description={gameData?.shortDescription} gameStatus={gameData?.isCompleted} showModal={handleShowModal}/>
+                        gameId={gameData.freeGameId} gameName={gameData.title} description={gameData?.shortDescription} gameStatus={gameData?.isCompleted} showModal={handleShowModal} deleteEntry={handleDelete}/>
                       })}
                     </tbody>
                   </Table>

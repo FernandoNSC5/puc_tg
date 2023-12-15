@@ -11,7 +11,7 @@ function Item(props) {
       </td>
       <td className="align-middle">
         <h6 className="mb-0">
-          <Badge className="mx-2" bg={props.gameStatus == null || props.gameStatus == 'playing' ? 'danger' : 'warning'}>
+          <Badge className="mx-2" bg={props.gameStatus == null || props.gameStatus === 'playing' ? 'danger' : 'warning'}>
             {props.gameStatus == null ? 'playing' : props.gameStatus}
           </Badge>
         </h6>
@@ -19,7 +19,7 @@ function Item(props) {
       <td className="align-middle">
         <Button variant="primary" size="sm" onClick={e => props.showModal('completeGame', props.gameId)}>Complete</Button>{' '}
         <Button variant="warning" size="sm" onClick={e => props.showModal('editGame', props.gameId)}>Edit</Button>{' '}
-        <Button variant="danger" size="sm">Delete</Button>
+        <Button variant="danger" size="sm" onClick={e => props.deleteEntry(props.gameId)}>Delete</Button>
       </td>
     </tr>
   );

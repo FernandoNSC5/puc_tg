@@ -15,12 +15,41 @@ function App() {
   const [freeGames, setFreeGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
   const [loadedGames, setLoadedGames] = useState([]);
+  const [modalGameSimplified, setModalGameSimplified] = useState({});
 
   var gameOptions = [{}];
 
   const handleSelectedGame = (event) => {
     setSelectedGame(JSON.parse(event.target.value));
     handleShowModal('addGame');
+  }
+
+  const handleComplete = (gameId, isCompleted) => {
+    if (gameId === undefined) {
+      console.log('Game ID not valid');
+      return;
+    }
+
+    console.log('',gameId, ' - ', isCompleted)
+    let data = {};
+    data.freeGameId = gameId;
+    data.isCompleted = !isCompleted;
+
+    axios.patch('/api', data, {
+      hearders: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      axios.get('/api')
+      .then(response => {
+        setLoadedGames(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    })
+
+    handleCloseModal();
   }
 
   const handleDelete = (gameId) => {
@@ -78,13 +107,14 @@ function App() {
    *   Modals logic
    *************************************************/
   const handleCloseModal = () => setShowModal({shouldShow: false, type: 'all'});
-  const handleShowModal = (action, gameId) => {
+  const handleShowModal = (action, gameSimplified) => {
     // Hanldes 'add game' modal
     if (action === 'addGame') {
       setShowModal({shouldShow: true, type: action});
     }
 
     if (action === 'completeGame') {
+      setModalGameSimplified(gameSimplified);
       setShowModal({shouldShow: true, type: action});
     }
   };
@@ -145,7 +175,9 @@ function App() {
                     <tbody>
                       {loadedGames?.map(gameData => {
                         return <Item key={gameData.freeGameId} imagePath={gameData.thumbnail}
-                        gameId={gameData.freeGameId} gameName={gameData.title} description={gameData?.shortDescription} gameStatus={gameData?.isCompleted} showModal={handleShowModal} deleteEntry={handleDelete}/>
+                        gameId={gameData.freeGameId} gameName={gameData.title}
+                        description={gameData?.shortDescription} gameStatus={gameData?.isCompleted}
+                        showModal={handleShowModal} deleteEntry={handleDelete}/>
                       })}
                     </tbody>
                   </Table>
@@ -208,17 +240,17 @@ function App() {
       {/** CONFIRM COMPLETION MODAL */}
       <Modal show={showModal.shouldShow && showModal.type === 'completeGame'} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          Complete Game
+          <b>{modalGameSimplified?.gameName}</b>
         </Modal.Header>
         <Modal.Body>
-          Woohoo, you are reading this text in a modal!
+          Do you realy want to  complete {modalGameSimplified?.gameName}?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleCloseModal}>
-            Save Changes
+          <Button variant="primary" onClick={e => handleComplete(modalGameSimplified.gameId, modalGameSimplified.gameStatus)}>
+            Complete
           </Button>
         </Modal.Footer>
       </Modal>

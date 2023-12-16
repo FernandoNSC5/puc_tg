@@ -17,7 +17,7 @@ function Item(props) {
         </h6>
       </td>
       <td className="align-middle">
-        <Button variant="primary" size="sm" onClick={e => props.showModal('completeGame', props.gameId)}>Complete</Button>{' '}
+        <Button variant="primary" size="sm" disabled={props.gameStatus} onClick={e => props.showModal('completeGame', props)}>Complete</Button>{' '}
         <Button variant="danger" size="sm" onClick={e => props.deleteEntry(props.gameId)}>Delete</Button>
       </td>
     </tr>

@@ -6,7 +6,7 @@ function Item(props) {
       <th>
         <Image src={props.imagePath} style={{ width: "5em", height: "auto" }} rounded/>
       </th>
-      <td className="align-middle">
+      <td className="align-middle" style={{width: "40em", height: "auto"}}>
         <span>{props.description}</span>
       </td>
       <td className="align-middle">

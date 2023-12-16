@@ -72,6 +72,8 @@ function App() {
       });
     })
 
+    handleCloseModal();
+
   }
 
   const handleSave = () => {
@@ -106,7 +108,11 @@ function App() {
   /**************************************************
    *   Modals logic
    *************************************************/
-  const handleCloseModal = () => setShowModal({shouldShow: false, type: 'all'});
+  const handleCloseModal = () => {
+    setSelectedGame(null);
+    setShowModal({shouldShow: false, type: 'all'})
+  };
+
   const handleShowModal = (action, gameSimplified) => {
     // Hanldes 'add game' modal
     if (action === 'addGame') {
@@ -173,12 +179,12 @@ function App() {
                       </tr>
                     </thead>
                     <tbody>
-                      {loadedGames?.map(gameData => {
+                      {loadedGames?.length > 0 ? (loadedGames?.map(gameData => {
                         return <Item key={gameData.freeGameId} imagePath={gameData.thumbnail}
                         gameId={gameData.freeGameId} gameName={gameData.title}
                         description={gameData?.shortDescription} gameStatus={gameData?.isCompleted}
                         showModal={handleShowModal} deleteEntry={handleDelete}/>
-                      })}
+                      })) : (<tr><td>No data</td><td>-</td><td>-</td><td>-</td></tr>)}
                     </tbody>
                   </Table>
                   <hr/>
@@ -228,7 +234,7 @@ function App() {
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button variant="secondary" onClick={e => handleCloseModal()}>
             Close
           </Button>
           <Button variant="primary" onClick={handleSave}>

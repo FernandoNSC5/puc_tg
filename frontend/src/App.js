@@ -85,10 +85,6 @@ function App() {
     if (action === 'completeGame') {
       setShowModal({shouldShow: true, type: action});
     }
-
-    if (action === 'editGame') {
-      setShowModal({shouldShow: true, type: action});
-    }
   };
 
   /**************************************************
@@ -200,24 +196,6 @@ function App() {
             Close
           </Button>
           <Button variant="primary" onClick={handleSave}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* EDIT GAME MODAL */}
-      <Modal show={showModal.shouldShow && showModal.type === 'editGame'} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          Edit Game
-        </Modal.Header>
-        <Modal.Body>
-          Woohoo, you are reading this text in a modal!
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleCloseModal}>
             Save Changes
           </Button>
         </Modal.Footer>

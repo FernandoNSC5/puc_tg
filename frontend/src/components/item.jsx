@@ -1,6 +1,7 @@
 import { Badge, Button, Image } from 'react-bootstrap';
 
 function Item(props) {
+  console.log(props.gameStatus)
   return (
     <tr className="fw-normal">
       <th>
@@ -11,8 +12,8 @@ function Item(props) {
       </td>
       <td className="align-middle">
         <h6 className="mb-0">
-          <Badge className="mx-2" bg={props.gameStatus == null || props.gameStatus === 'playing' ? 'danger' : 'warning'}>
-            {props.gameStatus == null ? 'playing' : props.gameStatus}
+          <Badge className="mx-2" bg={props.gameStatus ? 'success' : 'danger'}>
+            {props.gameStatus ? 'Completed' : 'Playing'}
           </Badge>
         </h6>
       </td>

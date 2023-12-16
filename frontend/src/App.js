@@ -143,7 +143,7 @@ function App() {
                     <tbody>
                       {loadedGames?.map(gameData => {
                         return <Item key={gameData.freeGameId} imagePath={gameData.thumbnail}
-                        gameId={gameData.freeGameId} gameName={gameData.title} description={gameData?.shortDescription} gameStatus={gameData?.isCompleted} showModal={handleShowModal} deleteEntry={handleDelete}/>
+                        gameId={gameData.freeGameId} gameName={gameData.title} description={gameData?.shortDescription} gameStatus={gameData?.completed} showModal={handleShowModal} deleteEntry={handleDelete}/>
                       })}
                     </tbody>
                   </Table>

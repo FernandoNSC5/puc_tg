@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  puctg_psql:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    container_name: puctg_psql
+
+  backend:
+    build: backend/.
+    ports:
+      - "8081:8081"
+    container_name: puctg_backend
+    depends_on:
+      - puctg_psql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://puctg_psql:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+
+  frontend:
+    build: frontend/.
+    ports:
+      - "3000:3000"
+    container_name: puctg_frontend
+    depends_on:
+      - backend

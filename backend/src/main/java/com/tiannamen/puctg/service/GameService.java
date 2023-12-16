@@ -30,7 +30,7 @@ public class GameService {
 
     public GameDTO patchGame(GameDTO gameDTO) {
         Game game = gameRepository.getReferenceById(gameDTO.getFreeGameId());
-        game.setCompleted(gameDTO.isCompleted());
+        game.setCompleted(gameDTO.getIsCompleted());
         gameRepository.save(game);
         return gameDTO;
     }

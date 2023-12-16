@@ -1,7 +1,6 @@
 import { Badge, Button, Image } from 'react-bootstrap';
 
 function Item(props) {
-  console.log(props.gameStatus)
   return (
     <tr className="fw-normal">
       <th>

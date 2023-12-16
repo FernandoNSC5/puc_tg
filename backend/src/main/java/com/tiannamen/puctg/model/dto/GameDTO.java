@@ -29,7 +29,7 @@ public class GameDTO {
 
     private String releaseDate;
 
-    private boolean isCompleted;
+    private Boolean isCompleted;
 
     public static GameDTOBuilder builder() {return new GameDTOBuilder();}
 }

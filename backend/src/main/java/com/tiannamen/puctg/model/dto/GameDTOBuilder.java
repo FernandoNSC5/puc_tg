@@ -20,7 +20,7 @@ public class GameDTOBuilder {
 
     private String releaseDate;
 
-    private boolean isCompleted;
+    private Boolean isCompleted;
 
     public GameDTOBuilder() {};
 
@@ -69,7 +69,7 @@ public class GameDTOBuilder {
         return this;
     }
 
-    public GameDTOBuilder isCompleted(boolean isCompleted) {
+    public GameDTOBuilder isCompleted(Boolean isCompleted) {
         this.isCompleted = isCompleted;
         return this;
     }

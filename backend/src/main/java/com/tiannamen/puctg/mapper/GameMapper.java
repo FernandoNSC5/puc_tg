@@ -29,7 +29,7 @@ public class GameMapper {
                 .developer(gameDTO.getDeveloper())
                 .publisher(gameDTO.getPublisher())
                 .releaseDate(gameDTO.getReleaseDate())
-                .completed(gameDTO.isCompleted())
+                .completed(gameDTO.getIsCompleted())
                 .build();
     }
 

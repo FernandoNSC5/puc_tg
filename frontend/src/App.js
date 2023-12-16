@@ -56,7 +56,9 @@ function App() {
     data.developer = selectedGame.developer;
     data.publisher = selectedGame.publisher;
     data.releaseDate = selectedGame.release_date;
-    data.isCompleted = false;
+    data.isCompleted = selectedGame.completed != null ? selectedGame.completed : false;
+
+    console.log('Saving ', data)
 
     axios.post('/api', data, {
       hearders: {
@@ -143,7 +145,7 @@ function App() {
                     <tbody>
                       {loadedGames?.map(gameData => {
                         return <Item key={gameData.freeGameId} imagePath={gameData.thumbnail}
-                        gameId={gameData.freeGameId} gameName={gameData.title} description={gameData?.shortDescription} gameStatus={gameData?.completed} showModal={handleShowModal} deleteEntry={handleDelete}/>
+                        gameId={gameData.freeGameId} gameName={gameData.title} description={gameData?.shortDescription} gameStatus={gameData?.isCompleted} showModal={handleShowModal} deleteEntry={handleDelete}/>
                       })}
                     </tbody>
                   </Table>
@@ -183,6 +185,8 @@ function App() {
                 <p><strong>{selectedGame?.developer}</strong> - {selectedGame?.release_date}</p>
                 <Form>
                   <Form.Check
+                    onChange={e => {selectedGame.completed != null 
+                      ? (selectedGame.completed = !selectedGame.completed) : (selectedGame.completed = true)}}
                     type='switch'
                     id='completed-switch'
                     label="Game Completed" />
